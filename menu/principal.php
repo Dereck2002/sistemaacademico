@@ -329,6 +329,7 @@ document.write(dias_semana[fecha_actual.getDay()] + ", " + fecha_actual.getDate(
 </div>
 </div>
 </div>
+
 </div>
 </div>
 </div>

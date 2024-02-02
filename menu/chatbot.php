@@ -1,7 +1,7 @@
 <?php
 require 'db_connection.php';
 
-$question = $_POST['question'];
+$question = isset($_POST['question']) ? $_POST['question'] : '';
 
 // Utiliza consultas preparadas para evitar inyecciones SQL
 $stmt = $conn->prepare("SELECT response FROM chatbot_responses WHERE question = ?");
@@ -27,6 +27,7 @@ function getOpenAIResponse($question) {
     $openai_api_key = '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';  // Reemplaza con tu propia clave API de OpenAI
 
     $openai_endpoint = 'https://api.openai.com/v1/engines/davinci-codex/completions';
+    
     $openai_headers = [
         'Content-Type: application/json',
         'Authorization: Bearer ' . $openai_api_key,
