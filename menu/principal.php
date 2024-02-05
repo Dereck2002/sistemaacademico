@@ -1,4 +1,5 @@
 <?php
+
 if (!$_SESSION["ok"])
 {
   header("location:../index.php");
@@ -74,7 +75,6 @@ document.write(dias_semana[fecha_actual.getDay()] + ", " + fecha_actual.getDate(
 
 </script></li></a>
 
-
             <!--logo end-->
 <div class="top-menu">
   <ul class="nav pull-right top-menu">
@@ -135,6 +135,7 @@ document.write(dias_semana[fecha_actual.getDay()] + ", " + fecha_actual.getDate(
                       </a>
                   </li>
 
+    <script src="../menu/scrip.js"></script>
                   <li class="sub-menu">
                     <a class="tooltips" data-placement="bottom" data-original-title="Muestra los Tipo de Usuarios." href="../tipousuario/mostrar.php"><i class="fa fa-user"></i><span>Tipo de Usuario</span>
                   <span class="dcjq-icon"></span></a>
@@ -298,7 +299,9 @@ document.write(dias_semana[fecha_actual.getDay()] + ", " + fecha_actual.getDate(
       	<div class="wrapper" id="contentLoading" style="display: none;"><br>
 		</div>
 		<section class="wrapper contenido"><div class="row">
-</div></section>
+</div>
+
+</section>
 <form class="form-horizontal" action="#" method="POST"  accept-charset="utf-8"   autocomplete="off" role="form">
 
 <div class="modal fade bs-example-modal-lg" id="modal_INFO" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
@@ -329,11 +332,186 @@ document.write(dias_semana[fecha_actual.getDay()] + ", " + fecha_actual.getDate(
 </div>
 </div>
 </div>
-
 </div>
 </div>
 </div>
 </div>
 </form>
+<style>
+  .chat-container {
+  
+    position: fixed;
+    bottom: 20px; /* Ajusta según sea necesario */
+    right: 20px; /* Ajusta según sea necesario */
+    z-index: 999; /* Asegura que el chat esté encima de otros elementos */
+    background-color: #fff; /* Ajusta según sea necesario */
+    border: 1px solid #ccc; /* Ajusta según sea necesario */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Ajusta según sea necesario */
+  }
 
+  .chat-header {
+    cursor: pointer;
+    background-color: #4CAF50; /* Ajusta según sea necesario */
+    color: #fff; /* Ajusta según sea necesario */
+    padding: 10px;
+    text-align: center;
+  }
+
+  .chat-box {
+    max-height: 200px; /* Ajusta según sea necesario */
+    overflow-y: auto;
+    padding: 10px;
+  }
+
+  .chat-input {
+    padding: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-top: 1px solid #ccc; /* Ajusta según sea necesario */
+  }
+
+  #user-input {
+    flex: 1;
+    padding: 5px;
+    margin-right: 5px;
+  }
+
+  button {
+    padding: 5px 10px;
+    background-color: #4CAF50; /* Ajusta según sea necesario */
+    color: #fff; /* Ajusta según sea necesario */
+    border: none;
+    cursor: pointer;
+  }
+</style>
+
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        .chat-container {
+            width: 300px;
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            overflow: hidden;
+            background-color: #fff;
+            box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.2);
+            display: block; /* Mostrar el contenedor por defecto */
+        }
+
+        .chat-header {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px;
+            text-align: center;
+            cursor: pointer;
+        }
+
+        .chat-box {
+            height: 200px;
+            overflow-y: auto;
+            padding: 10px;
+            background-color: #f9f9f9;
+        }
+
+        .chat-input {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px;
+            background-color: #f1f1f1;
+        }
+
+        .chat-input input {
+            flex: 1;
+            padding: 8px;
+            margin-right: 10px;
+            border: none;
+            border-radius: 5px;
+        }
+
+        .chat-input button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .toggle-button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 10px;
+            
+            /* Agregar animación para simular el efecto de flotar */
+            animation: float 0.5s infinite alternate;
+        }
+
+        @keyframes float {
+            0% {
+                transform: translateY(0);
+            }
+            100% {
+                transform: translateY(-5px);
+            }
+        }
+    </style>
+
+</head> 
+<body>
+
+<button class="toggle-button" onclick="toggleChatContainer()">Asistente</button>
+
+<div class="chat-container" id="chat-container">
+    <div class="chat-header" onclick="toggleChat()">Asistente</div>
+    <div class="chat-box" id="chat-box"></div>
+    <div class="chat-input">
+        <input type="text" id="user-input" placeholder="Escribe aquí..." autocomplete="off">
+        <button onclick="sendMessage()">Enviar</button>
     </div>
+</div>
+
+<script>
+    let chatActive = true;
+
+    function toggleChat() {
+        const chatBox = document.getElementById('chat-box');
+        const chatHeader = document.querySelector('.chat-header');
+
+        if (chatActive) {
+            chatBox.innerHTML = '<p>Hola, ¿en qué puedo ayudarte hoy?</p>'; // Saludo al activar
+            chatHeader.style.backgroundColor = '#ccc'; // Puedes cambiar el color al desactivar
+        } else {
+            chatBox.innerHTML = ''; // Restablece el contenido al activar
+            chatHeader.style.backgroundColor = '#4CAF50'; // Restablece el color al activar
+        }
+
+        chatActive = !chatActive;
+    }
+
+    function sendMessage() {
+        // Aquí puedes implementar la lógica para enviar mensajes del usuario al chat
+        const userInput = document.getElementById('user-input').value;
+        const chatBox = document.getElementById('chat-box');
+        chatBox.innerHTML += `<p>${userInput}</p>`;
+        document.getElementById('user-input').value = ''; // Limpiar el campo de entrada después de enviar
+    }
+
+    function toggleChatContainer() {
+        const chatContainer = document.getElementById('chat-container');
+        chatContainer.style.display = (chatContainer.style.display === 'none' || chatContainer.style.display === '') ? 'block' : 'none';
+    }
+</script>
+
+</body>
+</html>
+    <script src="../menu/scrip.js"></script>
